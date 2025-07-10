@@ -13,11 +13,11 @@ This repository contains a full-stack **Employee Management System** composed of
 
 ```
 
-.
-├── .vscode/
-├── ems-backend/        # Spring Boot backend (port 8080)
-├── ems-frontend/       # React frontend (default port 3000)
-└── docker-compose.yml
+/
+.vscode/
+ems-backend/        # Spring Boot backend (port 8080)
+ems-frontend/       # React frontend (default port 3000)
+docker-compose.yml
 
 ````
 
