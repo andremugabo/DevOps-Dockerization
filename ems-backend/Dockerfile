@@ -6,8 +6,6 @@ WORKDIR /app
 # Now copy the rest of the source files
 COPY . .
 
-# Package the application
-RUN mvn clean package -DskipTests
 
 # ---- Run stage ----
 FROM eclipse-temurin:17-jdk
