@@ -6,8 +6,8 @@ name: Build and Push to GHCR with SHA
 on:
   push:
     paths:
-      - 'frontend/**'
-      - 'backend/**'
+      - 'ems-frontend/**'
+      - 'ems-backend/**'
       - '.github/workflows/ghcr-build.yml'
   workflow_dispatch:
 
@@ -36,8 +36,8 @@ jobs:
       - name: Build and push frontend image
         uses: docker/build-push-action@v5
         with:
-          context: ./frontend
-          file: ./frontend/Dockerfile
+          context: ./ems-frontend
+          file: ./ems-frontend/Dockerfile
           push: true
           tags: |
             ghcr.io/${{ steps.vars.outputs.owner_lc }}/frontend:latest
@@ -68,7 +68,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: ./backend/Dockerfile
+          file: ./ems-backend/Dockerfile
           push: true
           tags: |
             ghcr.io/${{ steps.vars.outputs.owner_lc }}/backend:latest
