@@ -1,0 +1,75 @@
+# PUSH TO GITHUB REGISTRY
+
+
+name: Build and Push to GHCR with SHA
+
+on:
+  push:
+    paths:
+      - 'frontend/**'
+      - 'backend/**'
+      - '.github/workflows/ghcr-build.yml'
+  workflow_dispatch:
+
+jobs:
+  build-frontend:
+    name: Build & Push Frontend to GHCR
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set lowercase repository owner
+        id: vars
+        run: echo "owner_lc=${OWNER,,}" >> "$GITHUB_OUTPUT"
+        env:
+          OWNER: ${{ github.repository_owner }}
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.PAT_TOKEN }}
+
+      - name: Build and push frontend image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          file: ./frontend/Dockerfile
+          push: true
+          tags: |
+            ghcr.io/${{ steps.vars.outputs.owner_lc }}/frontend:latest
+            ghcr.io/${{ steps.vars.outputs.owner_lc }}/frontend:${{ github.sha }}
+
+  build-backend:
+    name: Build & Push Backend to GHCR
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set lowercase repository owner
+        id: vars
+        run: echo "owner_lc=${OWNER,,}" >> "$GITHUB_OUTPUT"
+        env:
+          OWNER: ${{ github.repository_owner }}
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.PAT_TOKEN }}
+
+      - name: Build and push backend image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./backend/Dockerfile
+          push: true
+          tags: |
+            ghcr.io/${{ steps.vars.outputs.owner_lc }}/backend:latest
+            ghcr.io/${{ steps.vars.outputs.owner_lc }}/backend:${{ github.sha }}
